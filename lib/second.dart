@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class Second extends StatefulWidget {
@@ -179,7 +181,9 @@ class _SecondState extends State<Second> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    add_kirana();
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                     decoration: BoxDecoration(
@@ -197,7 +201,9 @@ class _SecondState extends State<Second> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    add_kirana();
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                     decoration: BoxDecoration(
@@ -224,26 +230,49 @@ class _SecondState extends State<Second> {
       ),
     );
   }
-}
 
-TextField BuildTextField(TextEditingController controller, String label) {
-  return TextField(
-    controller: controller,
-    decoration: InputDecoration(
-      label: Text(label),
-      // labelStyle: TextStyle(color: Colors.blue),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.blue),
+  Future<void> add_kirana() async {
+    var data = {
+      "Name": namectrl.text.toString(),
+      "Mobile_Number": mobilectrl.text.toString(),
+      "E_mail": emailctrl.text.toString(),
+      "Gender": gender.toString(),
+      "Street": streetctrl.text.toString(),
+      "Pincode": pin.toString(),
+      "City": city.toString(),
+      "State": state.toString(),
+    };
+    var http;
+    var response = await http.post(
+        Uri.parse("https://khancollege.000webhostapp.com/add/add_kirana.php"),
+        body: json.encode(data));
+    var obj = jsonDecode(response.body);
+    if (obj['result'] == "S") {
+      print("Record is Saved");
+    } else {
+      print("Record is not  Saved");
+    }
+  }
+
+  TextField BuildTextField(TextEditingController controller, String label) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        label: Text(label),
+        // labelStyle: TextStyle(color: Colors.blue),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-buildBottomBorder(var color) {
-  return Border(
-    bottom: BorderSide(
-      color: color,
-      width: 2,
-    ),
-  );
+  buildBottomBorder(var color) {
+    return Border(
+      bottom: BorderSide(
+        color: color,
+        width: 2,
+      ),
+    );
+  }
 }
